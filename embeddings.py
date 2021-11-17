@@ -65,7 +65,7 @@ for i in range(3):
 				cv2.waitKey(1)
 				cv2.destroyAllWindows()     
 				break
-		elif key == ord('q'):
+		elif key == ord('p'):
 			print("Turning off camera.")
 			webcam.release()
 			print("Camera off.")
