@@ -5,10 +5,6 @@ import glob
 import time
 import csv
 import pickle
-# import mysql.connector
-# import datetime
-
-
 
 f=open("ref_name.pkl","rb")
 ref_dictt=pickle.load(f)         #ref_dict=ref vs name
@@ -18,7 +14,7 @@ f=open("ref_embed.pkl","rb")
 embed_dictt=pickle.load(f)      #embed_dict- ref  vs embedding 
 f.close()
 
-############################################################################  encodings and ref_ids 
+#  encodings and ref_ids 
 known_face_encodings = []  #encodingd of faces
 known_face_names = []	   #ref_id of faces
 
@@ -29,9 +25,7 @@ for ref_id , embed_list in embed_dictt.items():
 		known_face_encodings +=[embed]
 		known_face_names += [ref_id]
    												
-
-
-#############################################################frame capturing from camera and face recognition
+#frame capturing from camera and face recognition
 video_capture = cv2.VideoCapture(0)
 # Initialize some variables
 face_locations = []
@@ -40,10 +34,10 @@ face_names = []
 process_this_frame = True
 
 while True  :
-	# Grab a single frame of video
+	# Get a single frame of video
 	ret, frame = video_capture.read()
 
-	# Resize frame of video to 1/4 size for faster face recognition processing
+	# Resize frame of video to quarter face size for faster face recognition processing
 	small_frame = cv2.resize(frame, (0, 0), fx=0.25, fy=0.25)
 
 	# Convert the image from BGR color (which OpenCV uses) to RGB color (which face_recognition uses)
@@ -61,12 +55,7 @@ while True  :
 			matches = face_recognition.compare_faces(known_face_encodings, face_encoding)
 			name = "Unknown"
 
-			# # If a match was found in known_face_encodings, just use the first one.
-			# if True in matches:
-			#     first_match_index = matches.index(True)
-			#     name = known_face_names[first_match_index]
-
-			# Or instead, use the known face with the smallest distance to the new face
+			#Use the known face with the smallest distance to the new face
 			face_distances = face_recognition.face_distance(known_face_encodings, face_encoding)
 			best_match_index = np.argmin(face_distances)
 			if matches[best_match_index]:
@@ -84,7 +73,7 @@ while True  :
 		bottom *= 4
 		left *= 4
 
-		              #updating in database
+		#updating in database
 
 		cv2.rectangle(frame, (left, top), (right, bottom), (0, 0, 255), 2)
 
@@ -102,11 +91,11 @@ while True  :
 	cv2.imshow('Video', frame)
 
 	# Hit 'q' on the keyboard to quit!
-	if cv2.waitKey(1) & 0xFF == ord('q'):
+	if cv2.waitKey(1) & 0xFF == ord('x'):
 		# t.cancel()
 		break
 
-		# break
+		
 
 # Release handle to the webcam
 video_capture.release()
