@@ -1,12 +1,9 @@
 import sys
-
-#sys.path.append('/home/shivam/Downloads/lib/python3.6/site-packages')
-sys.path.append('/home/shivam/Downloads/face-recognition/lib/python3.6/site-packages')
 import cv2 
 import face_recognition
 import pickle
-name=input("enter name")
-ref_id=input("enter id")
+name=input("Enter Name")
+ref_id=input("Enter ID")
 
 try:
 	f=open("ref_name.pkl","rb")
@@ -34,7 +31,7 @@ except:
 
 
 
-for i in range(5):
+for i in range(3):
 	key = cv2. waitKey(1)
 	webcam = cv2.VideoCapture(0)
 	while True:
@@ -48,7 +45,7 @@ for i in range(5):
 		
 		key = cv2.waitKey(1)
 
-		if key == ord('s') : 
+		if key == ord('c') : 
 			face_locations = face_recognition.face_locations(rgb_small_frame)
 			if face_locations != []:
 
