@@ -2,11 +2,11 @@ import sys
 import cv2 
 import face_recognition
 import pickle
-name=input("Enter Name")
-ref_id=input("Enter ID")
+name=input("Enter Name: ")
+ref_id=input("Enter ID: ")
 
 try:
-	f=open("ref_name.pkl","rb")
+	f=open("name_dict.pkl","rb")
 
 	ref_dictt=pickle.load(f)
 	f.close()
@@ -15,24 +15,20 @@ except:
 ref_dictt[ref_id]=name
 
 
-f=open("ref_name.pkl","wb")
+f=open("name_dict.pkl","wb")
 pickle.dump(ref_dictt,f)
 f.close()
 
 try:
-	f=open("ref_embed.pkl","rb")
+	f=open("pics_dict.pkl","rb")
 
 	embed_dictt=pickle.load(f)
 	f.close()
 except:
 	embed_dictt={}
 
-
-
-
-
 for i in range(3):
-	key = cv2. waitKey(1)
+	key = cv2. waitKey(0)
 	webcam = cv2.VideoCapture(0)
 	while True:
 	     
@@ -49,19 +45,12 @@ for i in range(3):
 			face_locations = face_recognition.face_locations(rgb_small_frame)
 			if face_locations != []:
 
-				# filename="photo.jpg"
-				# cv2.imwrite(filename=filename, img=frame)
-				# image = face_recognition.load_image_file(filename)
-				# image = Image.fromarray(frame)
-				# image = image.convert('RGB')
 				face_encoding = face_recognition.face_encodings(frame)[0]
 				if ref_id in embed_dictt:
 					embed_dictt[ref_id]+=[face_encoding]
 				else:
 					embed_dictt[ref_id]=[face_encoding]
 				webcam.release()
-				# img_new = cv2.imread('saved_img.jpg', cv2.IMREAD_GRAYSCALE)
-				# img_new = cv2.imshow("Captured Image", img_new)
 				cv2.waitKey(1)
 				cv2.destroyAllWindows()     
 				break
@@ -72,6 +61,7 @@ for i in range(3):
 			print("Program ended.")
 			cv2.destroyAllWindows()
 			break
-f=open("ref_embed.pkl","wb")
+	
+f=open("pics_dict.pkl","wb")
 pickle.dump(embed_dictt,f)
 f.close()
