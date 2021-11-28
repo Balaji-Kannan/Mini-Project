@@ -1,4 +1,5 @@
 import face_recognition
+import pyfirmata
 import cv2
 import numpy as np
 import glob
@@ -6,11 +7,12 @@ import time
 import csv
 import pickle
 
-f=open("ref_name.pkl","rb")
+board=pyfirmata.Arduino("COM3")
+f=open("name_dict.pkl","rb")
 ref_dictt=pickle.load(f)         #ref_dict=ref vs name
 f.close()
 
-f=open("ref_embed.pkl","rb")
+f=open("pics_dict.pkl","rb")
 embed_dictt=pickle.load(f)      #embed_dict- ref  vs embedding 
 f.close()
 
@@ -81,18 +83,22 @@ while True  :
 		cv2.rectangle(frame, (left, bottom - 35), (right, bottom), (0, 0, 255), cv2.FILLED)
 		font = cv2.FONT_HERSHEY_DUPLEX
 		if(name=="Unknown"):
+			board.digital[13].write(0)
 			cv2.putText(frame, "Unknown", (left + 6, bottom - 6), font, 1.0, (255, 255, 255), 1)
 		else:
 			cv2.putText(frame, ref_dictt[name], (left + 6, bottom - 6), font, 1.0, (255, 255, 255), 1)
+			board.digital[13].write(1)
+			time.sleep(1)
 	font = cv2.FONT_HERSHEY_DUPLEX
 	# cv2.putText(frame, last_rec[0], (6,20), font, 1.0, (0,0 ,0), 1)
-
+	board.digital[13].write(0)
 	# Display the resulting imagecv2.putText(frame, ref_dictt[name], (left + 6, bottom - 6), font, 1.0, (255, 255, 255), 1)
 	cv2.imshow('Video', frame)
 
 	# Hit 'q' on the keyboard to quit!
 	if cv2.waitKey(1) & 0xFF == ord('x'):
 		# t.cancel()
+		board.digital[13].write(0)
 		break
 
 		
@@ -100,3 +106,5 @@ while True  :
 # Release handle to the webcam
 video_capture.release()
 cv2.destroyAllWindows()
+
+ 
